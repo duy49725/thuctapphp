@@ -27,12 +27,11 @@ create table letters(
     constraint fk_users foreign key (userId) references users(userId)
 );
 
-
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AddLetter`(
-    IN p_userId int,
-	IN p_title varchar(100),
-    IN p_content varchar(1000),
+	IN p_userId int,
+    IN p_title varchar(100),
+    IN p_content varchar(100),
     IN p_approver int,
     IN p_typesOfApplication varchar(100),
     IN p_startDate date,
@@ -40,9 +39,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AddLetter`(
     IN p_status varchar(100),
     IN p_attachment varchar(500)
 )
-BEGIN 
-	INSERT INTO letters (userId, title, content, approver, typesOfApplication, startDate, endDate, status, attachment) 
+BEGIN
+	START TRANSACTION;
+    INSERT INTO letters (userId, title, content, approver, typesOfApplication, startDate, endDate, status, attachment)
     VALUES (p_userId, p_title, p_content, p_approver, p_typesOfApplication, p_startDate, p_endDate, p_status, p_attachment);
+    IF ROW_COUNT() > 0 THEN COMMIT;
+    ELSE ROLLBACK ;
+    END IF ;
 END$$
 DELIMITER ;
 
@@ -55,14 +58,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AddUser`(
     IN p_email varchar(100),
     IN p_birthDate date,
     IN p_categoryUser varchar(100),
-    IN p_department varchar(100)
+    IN p_department varchar(100),
+    IN p_status varchar(100)
 )
 BEGIN
-	INSERT INTO users(username, fullname, password, email, birthDate, categoryUser, department) 
-    VALUES (p_username, p_fullname, p_password, p_email, p_birthDate, p_categoryUser, p_department);
+	START TRANSACTION;
+    INSERT INTO users (username, fullname, password, email, birthDate, categoryUser, department, status)
+    VALUES (p_username, p_fullname, p_password, p_email, p_birthDate, p_categoryUser, p_department, p_status);
+    IF ROW_COUNT() > 0 THEN COMMIT;
+    ELSE ROLLBACK ;
+	END IF ;
 END$$
 DELIMITER ;
-
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ApprovalLetter`(
@@ -117,17 +124,34 @@ BEGIN
 END$$
 DELIMITER ;
 
-
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteUser`(
 	IN p_userId INT
 )
 BEGIN
-	DELETE FROM letters WHERE userId = p_userId;
-	DELETE FROM users WHERE userId = p_userId;
+	DECLARE user_exists INT DEFAULT 0;
+    DECLARE letter_exists INT DEFAULT 0;
+    DECLARE exit handler for sqlexception
+    BEGIN
+		ROLLBACK;
+	END;
+    START TRANSACTION;
+    SELECT COUNT(*) INTO letter_exists FROM letters WHERE userId = p_userId;
+    IF letter_exists > 0 THEN 
+		DELETE FROM letters WHERE userId = p_userId;
+        COMMIT;
+	ELSE 
+		ROLLBACK;
+	END IF;
+    SELECT COUNT(*) INTO user_exists FROM users WHERE userId = p_userId;
+    IF user_exists > 0 THEN
+		DELETE FROM users WHERE userId = p_userId;
+        COMMIT;
+	ELSE 
+		ROLLBACK;
+	END IF;
 END$$
 DELIMITER ;
-
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `FindUserByEmail`(
@@ -148,7 +172,6 @@ BEGIN
 END$$
 DELIMITER ;
 
-
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetLetterById`(
 	IN p_letterId int
@@ -163,11 +186,12 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetLetterForDashboard`(
 )
 begin
-	SELECT letterId, letters.userId, u.username, title, content, approver, typesOfApplication, approvalDate, startDate, endDate, status, attachment, letters.created_at
+	SELECT letterId, letters.userId, u.username, title, content, approver, typesOfApplication, approvalDate, startDate, endDate, letters.status, attachment, letters.created_at
 	FROM letters 
 	INNER JOIN users u ON letters.userId = u.userId  order by created_at ASC limit 30 ;
 end$$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetLetters`(
@@ -182,13 +206,7 @@ BEGIN
         'SELECT letterId, letters.userId, u.username, title, content, approver, typesOfApplication, approvalDate, startDate, endDate, letters.status, attachment, letters.created_at
         FROM letters 
         INNER JOIN users u ON letters.userId = u.userId 
-        WHERE title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ? 
-        ORDER BY ', 
-        IF(p_sort IN ('letterId', 'userId', 'username', 'title', 'approvalDate', 'startDate', 'endDate', 'letters.status'), 
-		IF(p_sort = 'userId', 'letters.userId', p_sort), 'letterId'), 
-        ' ', 
-        IF(p_order IN ('ASC', 'DESC'), p_order, 'ASC'), 
-        ' LIMIT ?, ?'
+        WHERE title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ? ORDER BY ' , p_sort, ' ' , p_order , ' LIMIT ?, ?'
     );
     
     SET @search_param = CONCAT('%', p_search, '%');
@@ -209,16 +227,12 @@ BEGIN
 END$$
 DELIMITER ;
 
-
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserByDepartment`(
-	IN p_department INT
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserByDepartment`(IN `p_department` VARCHAR(100))
 BEGIN
-	SELECT * from users where department = p_department;
+	SELECT * from users where (department = p_department and categoryUser = 'Quản lý') OR categoryUser = 'Admin';
 END$$
 DELIMITER ;
-
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserById`(
@@ -239,20 +253,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUsers`(
     IN p_search VARCHAR(255)
 )
 BEGIN
-    SET @query = CONCAT('SELECT userId, username, fullname, password, email, birthDate, categoryUser, department, created_at FROM users WHERE username LIKE ? OR userId LIKE ? ORDER BY ', p_sort, ' ', p_order, ' LIMIT ?, ?');
+    SET @query = CONCAT('SELECT userId, username, fullname, password, email, birthDate, categoryUser, department, status, created_at FROM users WHERE username LIKE ? OR userId LIKE ? ORDER BY ', p_sort, ' ', p_order, ' LIMIT ?, ?');
     
     SET @search_param = CONCAT('%', p_search, '%');
     
     PREPARE stmt FROM @query;
     EXECUTE stmt USING @search_param, @search_param, p_offset, p_limit;
     
-    -- Get total count
     SELECT COUNT(*) as total FROM users WHERE username LIKE CONCAT('%', p_search, '%') OR userId LIKE CONCAT('%', p_search, '%');
     
     DEALLOCATE PREPARE stmt;
 END$$
 DELIMITER ;
-
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUser`(
@@ -263,7 +275,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUser`(
     IN p_email VARCHAR(100),
     IN P_birthDate DATE,
     IN p_categoryUser VARCHAR(100),
-    IN p_department VARCHAR(100)
+    IN p_department VARCHAR(100),
+    IN p_status VARCHAR(100)
 )
 BEGIN
 	declare user_exists INT default 0;
@@ -285,11 +298,11 @@ BEGIN
                 email = p_email,
                 birthDate = p_birthDate,
                 categoryUser = p_categoryUser,
-                department = p_department
+                department = p_department,
+                status = p_status
 			where userId = p_userId;
             commit;
 		end if;
 	end if;
 END$$
 DELIMITER ;
-
