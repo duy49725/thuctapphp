@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    height: 100vh;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.container{
+    height: 100%;
+    background-color: white;
+}
+
+.container .header{
+    background: #007EC6;
+    display: flex;
+    color: #fff;
+    height: 75px;
+    width: 100vw;
+    align-items: center;
+}
+
+.container .header h3{
+    width: 158px;
+    height: 48px;
+    margin-top: 15px;
+    margin-left: 42px;
+    font-family: Noto Sans JP;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.container .header p{
+    width: 240px;
+    height: 29px;
+    margin-top: 13px;
+    margin-left: 33px;
+    font-family: Noto Sans JP;
+    line-height: 100%;
+    letter-spacing: 0%;
+    font-size: 24px;
+    font-weight: 400px;
+    color: #ffff;
+}
+
+.container .main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 75px);
+}
+
+.container .main h1{
+    width: 541px;
+    height: 82px;
+    font-weight: 700px;
+    font-size: 56px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #007EC6;
+    margin-top: 230px;
+    font-family: Noto Sans JP;
+}
+
+.container .main form{
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.container .main form .input-container{
+    width: 475px;
+    height: 43px;
+    position: relative;
+}
+
+.container .main form .input-container label{
+    width: 127px;
+    height: 17px;
+    font-family: Noto Sans JP;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    position: absolute;
+    top: 15px;
+}
+
+.container .main form .input-container .label-password{
+    width: 80px;
+    height: 17px;
+    left: 36px;
+    position: absolute;
+}
+
+.container .main form .input-container input{
+    width: 342px;
+    height: 40px;
+    margin-top: 3px;
+    border-radius: 4px;
+    border: 1px solid #cccccc;
+    color: #000000;
+    left: 133px;
+    position: absolute;
+    padding-left: 5px;
+}
+
+.container .main form .button{
+    display: flex;
+    gap: 25px;
+    margin-top: 30px;
+    margin-left: 133px;
+}
+
+.container .main form .button button{
+    width: 161px;
+    height: 50px;
+    color: white;
+    font-family: Noto Sans JP;
+    font-weight: 700px;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    border: none;
+    border-radius: 4px;
+}
+
+.container .main form .button button.login{
+    background-color: #007EC6;
+}
+
+.container .main form .button button.clear{
+    background-color: #E2005C;
+}
+
+.alert-danger{
+    width: 100%;
+    color: #F90A0A;
+    margin-left: 133px;
+    margin-top: 21px;
+}
+
+.alert-danger-empty{
+    width: 100%;
+    color: #F90A0A;
+    margin-left: 133px;
+    margin-top: 21px;
+}
+
+span{
+    color: red;
+    top: 3px;
+    position: absolute;
+}
