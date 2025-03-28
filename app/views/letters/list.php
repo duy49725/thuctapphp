@@ -45,13 +45,13 @@
                                             style="border: 2px solid black; background-color: #14ae5c; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0; text-align: center; line-height: 25px; text-decoration: none; display: inline-block;">
                                                 Duyệt
                                             </a>
-                                            <button data-id="<?= $letter->userId ?>" 
+                                            <button data-id="<?= $letter->letterId ?>" 
                                                     style="background-color: #ec221f; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0;" 
                                                     class="btn-cancel" type="button">
                                                 Hủy
                                             </button>
                                             <form action="<?= BASE_URL ?>/public/index.php?url=letters/cancelLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" method="POST">
-                                                <div class="popup-confirm" data-id="<?= $letter->userId ?>" style="display: none; width: 614px; height: 356px">
+                                                <div class="popup-confirm" data-id="<?= $letter->letterId ?>" style="display: none; width: 614px; height: 356px">
                                                     <div class="popup-container">
                                                         <div class="popup-header">
                                                             <p>Thông báo</p>
@@ -136,12 +136,12 @@
     const cancelButtons = document.querySelectorAll('.btn-cancel');
     cancelButtons.forEach(btn => {
         btn.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            const modalPopup = document.querySelector(`.popup-confirm[data-id="${userId}"]`);
+            const letterId = this.getAttribute('data-id');
+            const modalPopup = document.querySelector(`.popup-confirm[data-id="${letterId}"]`);
             if (modalPopup) {
                 modalPopup.style.display = 'flex';
             } else {
-                console.error(`Không tìm thấy popup với data-id="${userId}"`);
+                console.error(`Không tìm thấy popup với data-id="${letterId}"`);
             }
         });
     });
@@ -155,5 +155,5 @@
                 modalPopup.style.display = 'none';
             }
         });
-    });
+    });  
 </script>
