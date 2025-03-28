@@ -37,32 +37,40 @@
                             <td><?php echo $letter->approvalDate ?></td>
                             <td style="border-right: none"><?php echo $letter->title ?></td>
                             <td>
-                                <div style="display: flex; justify-content:end; align-items: center; gap: 10px;">
-                                    <?php if($letter->status == 'Chờ duyệt'): ?>
-                                        <a href="<?php echo BASE_URL . '/public/index.php?url=letters/approvalLetter/' . $letter->letterId . '/' .$letter->userId; ?>" 
-                                           style="border: 2px solid black; background-color: #14ae5c; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0; text-align: center; line-height: 25px; text-decoration: none; display: inline-block;">
-                                            Duyệt
-                                        </a>
-                                        <button data-id="<?php echo $letter->userId; ?>" style="background-color: #ec221f; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0;" class="btn-cancel" type="button">Hủy</button>
-                                        <form action="<?php echo BASE_URL ?>/public/index.php?url=letters/cancelLetter/<?php echo $letter->letterId; ?>/<?php echo $letter->userId; ?>" method="POST">
-                                            <div class="popup-confirm" data-id="<?php echo $letter->userId; ?>" style="display: none; width: 614px; height: 356px">
-                                                <div class="popup-container">
-                                                    <div class="popup-header">
-                                                        <p>Thông báo</p>
-                                                        <img src="./image/Vector.png" alt="" class="exit-btn">
-                                                    </div>
-                                                    <div class="popup-body" style="display: flex; justiy-content: center; align-items: center; flex-direction: column">
-                                                        <p style="align-self: start; margin-left: 35px; font-size: 24px; font-weight: 400">Lý do hủy đơn ?</p>
-                                                        <input style="width: 540px; height: 76px; margin-top: 10px; border-radius: 4px; border: 1px solid #cccccc; font-size: 25px; padding: 10px" type="text" name="reason">
-                                                        <div>
-                                                            <button class="btn-ok" type="submit">OK</button>
+                            <?php 
+                                if ($_SESSION['user_categoryUser'] == 'Admin' || ($_SESSION['user_categoryUser'] == 'Quản lý')): ?>
+                                    <div style="display: flex; justify-content:end; align-items: center; gap: 10px;">
+                                        <?php if ($letter->status == "Chờ duyệt"): ?>
+                                            <a href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" 
+                                            style="border: 2px solid black; background-color: #14ae5c; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0; text-align: center; line-height: 25px; text-decoration: none; display: inline-block;">
+                                                Duyệt
+                                            </a>
+                                            <button data-id="<?= $letter->userId ?>" 
+                                                    style="background-color: #ec221f; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0;" 
+                                                    class="btn-cancel" type="button">
+                                                Hủy
+                                            </button>
+                                            <form action="<?= BASE_URL ?>/public/index.php?url=letters/cancelLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" method="POST">
+                                                <div class="popup-confirm" data-id="<?= $letter->userId ?>" style="display: none; width: 614px; height: 356px">
+                                                    <div class="popup-container">
+                                                        <div class="popup-header">
+                                                            <p>Thông báo</p>
+                                                            <img src="./image/Vector.png" alt="" class="exit-btn">
+                                                        </div>
+                                                        <div class="popup-body" style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+                                                            <p style="align-self: start; margin-left: 35px; font-size: 24px; font-weight: 400">Lý do hủy đơn ?</p>
+                                                            <input style="width: 540px; height: 76px; margin-top: 10px; border-radius: 4px; border: 1px solid #cccccc; font-size: 25px; padding: 10px" 
+                                                                type="text" name="reason">
+                                                            <div>
+                                                                <button class="btn-ok" type="submit">OK</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </form>
-                                    <?php endif; ?>
-                                </div>
+                                            </form>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

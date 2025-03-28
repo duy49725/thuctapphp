@@ -8,28 +8,26 @@
         </form>
         <div class="right-button">
             <button class="btn-add"><a href="<?php echo BASE_URL ?>/public/index.php?url=users/testcreate">Thêm mới</a></button>
-            <?php 
-                if($_SESSION['user_categoryUser'] == 'Quản lý'){
-                    echo ' <form action="<?php echo BASE_URL; ?>/public/index.php?url=users/deleteMultiple" method="POST" id="delete-form">
-                                <button type="submit" class="btn-deleteAll" id="delete-selected" disabled>Xóa nhiều</button>
-                                <div class="popup-confirm" style="display: none;">
-                                    <div class="popup-container" style="height: 350px;">
-                                        <div class="popup-header">
-                                            <p>Thông báo</p>
-                                            <img src="./image/Vector.png" alt="" class="exit-btn">
-                                        </div>
-                                        <div class="popup-body">
-                                            <p style="margin-left: 10px; margin-top: 60px">Bạn có chắc chắn muốn xóa các người dùng đã chọn?</p>
-                                            <div style="margin-left: 38px">
-                                                <button type="submit" class="btn-ok" style="background-color: #E2005C; border-radius: 4px; width: 220px; height: 50px;">OK</button>
-                                                <button class="btn-cancel" style="background-color: #007EC6; border-radius: 4px; width: 220px; height: 50px;" type="button">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
+            <?php if($_SESSION['user_categoryUser'] == 'Quản lý' || $_SESSION['user_categoryUser'] == 'Admin'): ?>
+                <form action="<?php echo BASE_URL; ?>/public/index.php?url=users/deleteMultiple" method="POST" id="delete-form">
+                    <button type="submit" class="btn-deleteAll" id="delete-selected" disabled>Xóa nhiều</button>
+                    <div class="popup-confirm" style="display: none;">
+                        <div class="popup-container" style="height: 350px;">
+                            <div class="popup-header">
+                                <p>Thông báo</p>
+                                <img src="./image/Vector.png" alt="" class="exit-btn">
+                            </div>
+                            <div class="popup-body">
+                                <p style="margin-left: 10px; margin-top: 60px">Bạn có chắc chắn muốn xóa các người dùng đã chọn?</p>
+                                <div style="margin-left: 38px">
+                                    <button type="submit" class="btn-ok" style="background-color: #E2005C; border-radius: 4px; width: 220px; height: 50px;">OK</button>
+                                    <button class="btn-cancel" style="background-color: #007EC6; border-radius: 4px; width: 220px; height: 50px;" type="button">Cancel</button>
                                 </div>
-                            </form>';
-                }
-            ?>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
     <div class="main-body">
@@ -73,24 +71,26 @@
                             <td><?php echo $user->status ?></td>
                             <td>
                                 <button class="btn-edit"><a href="<?php echo BASE_URL ?>/public/index.php?url=users/testedit/<?php echo $user->userId ?>">Sửa</a></button>
-                                <button class="btn-delete" data-id="<?php echo $user->userId ?>">Xóa</button>
-                                <form action="<?php echo BASE_URL ?>/public/index.php?url=users/delete/<?php echo $user->userId ?>" method="POST">
-                                    <div class="popup-confirm" data-id="<?php echo $user->userId ?>" style="display: none;">
-                                        <div class="popup-container" style="height: 350px">
-                                            <div class="popup-header">
-                                                <p>Thông báo</p>
-                                                <img src="./image/Vector.png" alt="" class="exit-btn">
-                                            </div>
-                                            <div class="popup-body">
-                                                <p style="padding-left: 35px;">Bạn có chắc chắn muốn xóa người dùng <?php echo $user->username ?> ?</p>
-                                                <div style="padding-left: 64px;">
-                                                    <button class="btn-ok" type="submit">OK</button>
-                                                    <button class="btn-cancel" type="button">Cancel</button>
+                                <?php if($_SESSION['user_categoryUser'] == 'Quản lý' || $_SESSION['user_categoryUser'] == 'Admin'): ?>   
+                                    <button class="btn-delete" data-id="<?php echo $user->userId ?>">Xóa</button>
+                                    <form action="<?php echo BASE_URL ?>/public/index.php?url=users/delete/<?php echo $user->userId ?>" method="POST">
+                                        <div class="popup-confirm" data-id="<?php echo $user->userId ?>" style="display: none;">
+                                            <div class="popup-container" style="height: 350px">
+                                                <div class="popup-header">
+                                                    <p>Thông báo</p>
+                                                    <img src="./image/Vector.png" alt="" class="exit-btn">
+                                                </div>
+                                                <div class="popup-body">
+                                                    <p style="padding-left: 35px;">Bạn có chắc chắn muốn xóa người dùng <?php echo $user->username ?> ?</p>
+                                                    <div style="padding-left: 64px;">
+                                                        <button class="btn-ok" type="submit">OK</button>
+                                                        <button class="btn-cancel" type="button">Cancel</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
