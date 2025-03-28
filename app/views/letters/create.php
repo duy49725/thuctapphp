@@ -63,13 +63,16 @@
             <div class="form-container">
                 <label for="">Đính kèm</label>
                 <?php
-                  echo $attachment ? "<p style='margin-left: 62px;'>$attachment</p>"
+                  echo $attachment ? "<p style='margin-left: 62px;  margin-bottom: 25px; color: #ec221f; cursor: pointer;' onclick='showImage()'>$attachment</p>"
                   : "<div style='margin-left: 62px; border: 1px solid #cccccc; display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; padding: 5px; height: 40px; width: 189px; border-radius: 4px'>
                        <input id='file' style='display: none' type='file' name='attachment' disabled>
                        <label for='file' style='cursor: pointer;'><img src='./image/upload.svg' alt=''></label>
                     </div>";
-  
                 ?>
+            </div>
+            <div id="image_container" style="z-index: 100; position: fixed; left: 0; top: 0; background-color: rgba(0,0,0,0.4); width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; display: none">
+                <img src="./uploads/<?php echo $attachment; ?>" alt="">
+                <img src="./image/Vector.png" alt="" id="close-image" style="cursor: pointer; top: 20px; position: absolute; right: 20px; width: 20px; height: 20px">
             </div>
         </div>
         <div class="button">
@@ -95,6 +98,13 @@
 </div>
 
 <script>
+    const imageContainer = document.getElementById('image_container');
+    const showImage = () => {
+        imageContainer.style.display = 'flex';
+    }
+    document.getElementById('close-image').addEventListener('click', () => {
+        imageContainer.style.display = 'none';
+    })
     const datetime = document.querySelectorAll('.datetime');
     datetime.forEach((date) => {
         date.addEventListener('change', (event) => {

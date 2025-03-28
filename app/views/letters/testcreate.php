@@ -69,8 +69,10 @@
             <div class="form-container">
                 <label for="">Đính kèm</label>
                 <div style="margin-left: 62px; border: 1px solid #cccccc; display: flex; flex-direction: row-reverse; justity-content: space-between; align-items: center; padding: 5px; height: 40px; width: 189px; border-radius: 4px">
-                    <input id="file" style="display: none" type="file" name="attachment" style="width: 189px; height: 40px;  padding: 5px;">
-                    <label for="file" style="cursor: pointer; "><img src="./image/upload.svg" alt=""></label>
+                    <?php echo isset($_FILES['attachment']) ? "<p style='margin-left: 62px; margin-bottom: 26px; color: #ec221f; cursor: pointer;'>{$_FILES['attachment']}</p>"
+                            : '<input id="file" style="display: none" type="file" name="attachment" style="width: 189px; height: 40px;  padding: 5px;">
+                               <label for="file" style="cursor: pointer; "><img src="./image/upload.svg" alt=""></label>'
+                    ?>
                 </div>
             </div>
             <div class="check check-title"><?php echo $attachment_err; ?></div>

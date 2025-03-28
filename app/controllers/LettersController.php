@@ -190,7 +190,6 @@
                     'usersDepartment' => $usersDepartment
                 ];
                 $this->view('letters/testcreate', $data);
-                var_dump($usersDepartment);
             }
         }
 
