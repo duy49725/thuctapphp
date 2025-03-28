@@ -2,7 +2,7 @@
     <p>Thêm mới đơn</p>
     <form action="<?php echo BASE_URL; ?>/public/index.php?url=letters/testcreate" method="POST" enctype="multipart/form-data">
         <input type="text" style="display: none" name="userId" value="<?php echo $_SESSION['user_id'] ?>">
-        <div class="input-container">
+        <div class="input-container" style="<?php echo  $title_err ? 'margin-bottom: 70px' : 'margin-bottom: 40px'; ?>">
             <div class="form-container">
                 <label for="">Tiêu đề</label>
                 <input type="text" name="title" id="title">
@@ -10,12 +10,12 @@
             <div class="check check-title"><?php echo $title_err; ?></div>
         </div>
 
-        <div class="input-container">
+        <div class="input-container" style="<?php echo  $title_err ? 'margin-bottom: 70px' : 'margin-bottom: 40px'; ?>">
             <div class="form-container">
                 <label for="">Nội dung</label>
                 <textarea name="content" id="content" style="width: 480px; height: 94px; margin-left: 67px; border: 1px solid #cccc; border-radius: 4px"></textarea>
             </div>
-            <div class="check check-content"><?php echo $content_err; ?></div>
+            <div class="check check-content" style="margin-top: 60px"><?php echo $content_err; ?></div>
         </div>
 
         <div class="input-container">
@@ -44,25 +44,28 @@
                     </select>
                 </div>
             </div>
+            <div><?php echo $typesOfApplication_err; ?></div>
         </div>
 
-        <div class="input-container">
+        <div class="input-container" style="<?php echo  $startDate_err ? 'margin-bottom: 70px' : 'margin-bottom: 40px'; ?>">
             <div class="form-container">
                 <label for="">Ngày bắt đầu</label>
                 <div class="date-container" style="margin-left: -25px">
                     <input class="datetime" type="date" name="startDate" style="width: 189px; height: 40px; padding: 5px; color: transparent;">
                 </div>
             </div>
+            <div class="check check-title"><?php echo $startDate_err; ?></div>
         </div>
-        <div class="input-container">
+        <div class="input-container" style="<?php echo  $endDate_err ? 'margin-bottom: 70px' : 'margin-bottom: 40px'; ?>">
             <div class="form-container">
                 <label for="">Ngày kết thúc</label>
                 <div class="date-container" style="margin-left: -29px">
                     <input class="datetime" type="date" name="endDate" style="width: 189px; height: 40px;  padding: 5px; color: transparent;">
                 </div>
             </div>
+            <div class="check check-title"><?php echo $endDate_err; ?></div>
         </div>
-        <div class="input-container">
+        <div class="input-container" style="<?php echo  $attachment_err ? 'margin-bottom: 70px' : 'margin-bottom: 40px'; ?>">
             <div class="form-container">
                 <label for="">Đính kèm</label>
                 <div style="margin-left: 62px; border: 1px solid #cccccc; display: flex; flex-direction: row-reverse; justity-content: space-between; align-items: center; padding: 5px; height: 40px; width: 189px; border-radius: 4px">
@@ -70,7 +73,7 @@
                     <label for="file" style="cursor: pointer; "><img src="./image/upload.svg" alt=""></label>
                 </div>
             </div>
-            <span class="check check-title"><?php echo $attachment_err; ?></span>
+            <div class="check check-title"><?php echo $attachment_err; ?></div>
         </div>
         <div class="button">
             <button id="btn-continue" class="continue">Tiếp theo</button>

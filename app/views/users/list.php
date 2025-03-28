@@ -188,7 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             updateDeleteButton();
 
-            // Cập nhật trạng thái "select-all" chỉ khi tất cả được chọn hoặc không chọn gì
             const allChecked = Array.from(userCheckboxes).every(cb => cb.checked);
             const noneChecked = Array.from(userCheckboxes).every(cb => !cb.checked);
             if (allChecked) {

@@ -107,31 +107,35 @@
                 ];
                 
                 if(empty($data['userId'])){
-                    $data['userId_err'] = 'Vui lòng đăng nhập để tạo đơn';
+                    $data['userId_err'] = '※Vui lòng đăng nhập để tạo đơn';
                 }
 
                 if(empty($data['title'])){
-                    $data['title_err'] = 'Tiêu đề không được để trống';
+                    $data['title_err'] = '※Tiêu đề không được để trống';
                 }
 
                 if(empty($data['content'])){
-                    $data['content_err'] = 'Nội dung không được để trống';
+                    $data['content_err'] = '※Nội dung không được để trống';
                 }
 
                 if(empty($data['approver'])){
-                    $data['approver_err'] = 'Vui lòng lựa chọn người duyệt';
+                    $data['approver_err'] = '※Vui lòng lựa chọn người duyệt';
                 }
 
                 if(empty($data['typesOfApplication'])){
-                    $data['typesOfApplication_err'] = 'Vui lòng lựa chọn loại đơn';
+                    $data['typesOfApplication_err'] = '※Vui lòng lựa chọn loại đơn';
                 }
 
                 if(empty($data['startDate'])){
-                    $data['startDate_err'] = 'Vui lòng lựa chọn ngày duyệt';
+                    $data['startDate_err'] = '※Vui lòng lựa chọn ngày duyệt';
+                }else if($data['startDate'] > $data['endDate']){
+                    $data['startDate_err'] = '※Ngày bắt đầu phải nhỏ hơn ngày kết thúc';
                 }
 
                 if(empty($data['endDate'])){
-                    $data['endDate_err'] = 'Vui lòng lựa chọn ngày kết thúc';
+                    $data['endDate_err'] = '※Vui lòng lựa chọn ngày kết thúc';
+                }else if($data['startDate'] > $data['endDate']){
+                    $data['endDate_err'] = '※Ngày bắt đầu phải nhỏ hơn ngày kết thúc';
                 }
 
                 if(isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK){
@@ -155,9 +159,10 @@
                         ];
                         $this->redirect('letters/create');
                     }else{
-                        $data['attachment_err'] = 'Vui lòng lựa chọn tệp đính kèm';
+                        $data['attachment_err'] = '※Vui lòng lựa chọn tệp đính kèm';
                     }
                 }else{
+                    $data['attachment_err'] = '※Vui lòng lựa chọn tệp đính kèm';
                     $this->view('letters/testcreate', $data);
                 }
             }else{
