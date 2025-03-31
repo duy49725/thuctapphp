@@ -76,10 +76,10 @@
             </div>
         </div>
         <div class="button">
-            <button id="btn-continue" type="submit" class="continue">Lưu</button>
-            <button class="clear">Xóa trống</button>
+            <button id="btn-continue" type="submit" class="continue">Duyệt</button>
+            <button id="btn-cancel-letter" class="btn-cancel" type="button">Hủy</button>
         </div>
-        <div class="popup-confirm">
+        <div class="popup-confirm popup-approval">
             <div class="popup-container" style="height: 350px">
                 <div class="popup-header">
                     <p>Thông báo</p>
@@ -95,9 +95,39 @@
             </div>
         </div>
     </form>
+    <form action="<?= BASE_URL ?>/public/index.php?url=letters/cancelLetter/<?php echo $letterId; ?>/<?php echo $userId; ?>" method="POST">
+        <div class="popup-confirm popup-cancel" style="display: none; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4)">
+            <div class="popup-container" style="height: 400px">
+                <div class="popup-header">
+                    <p>Thông báo</p>
+                    <img src="./image/Vector.png" alt="" class="exit-btn">
+                </div>
+                <div class="popup-body" style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+                    <p style="align-self: start; margin-left: 35px; font-size: 24px; font-weight: 400">Lý do hủy đơn ?</p>
+                    <input style="width: 540px; height: 76px; margin-top: 10px; border-radius: 4px; border: 1px solid #cccccc; font-size: 25px; padding: 10px;" 
+                        type="text" name="reason">
+                    <div>
+                        <button class="btn-ok" type="submit">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
+
 <script>
+    const cancelButton = document.getElementById('btn-cancel-letter');
+    if (cancelButton) {
+        cancelButton.addEventListener('click', function() {
+            const modalPopup = document.querySelector('.popup-confirm.popup-cancel');
+            if (modalPopup) {
+                modalPopup.style.display = 'flex';
+            }
+        });
+    }
+
+    
     const imageContainer = document.getElementById('image_container');
     const showImage = () => {
         imageContainer.style.display = 'flex';
@@ -115,38 +145,36 @@
             }
         })
     })
-    datetime.forEach((date) => {
-        date.addEventListener('change', (event) => {
-            if(event.target.value){
-                event.target.style.color = 'black';
-            }else{
-                event.target.style.color = 'transparent';
-            }
-        })
-    })
     const continueBtn = document.getElementById("btn-continue");
     continueBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        const modalpopup = document.querySelector('.popup-confirm');
+        const modalpopup = document.querySelector('.popup-confirm.popup-approval');
         modalpopup.style.display = 'flex';
     })
-    const cancelBtn = document.querySelector('.btn-cancel');
+    const cancelBtn = document.querySelector('.popup-approval .btn-cancel');
     cancelBtn.addEventListener('click', function(e){
         e.preventDefault();
-        const modalpopup = document.querySelector('.popup-confirm');
+        const modalpopup = document.querySelector('.popup-confirm.popup-approval');
         modalpopup.style.display = 'none';
     })
 
-    const exitBtn = document.querySelector('.exit-btn');
+    const exitBtn = document.querySelector('.popup-approval .exit-btn');
     exitBtn.addEventListener('click', function(e){
         e.preventDefault();
-        const modalpopup = document.querySelector('.popup-confirm');
+        const modalpopup = document.querySelector('.popup-confirm.popup-approval');
         modalpopup.style.display = 'none';
     })
 
-    const okBtn = document.querySelector('.btn-ok');
+    const exitBtn2 = document.querySelector('.popup-cancel .exit-btn');
+    exitBtn2.addEventListener('click', function(e){
+        e.preventDefault();
+        const modalpopup = document.querySelector('.popup-confirm.popup-cancel');
+        modalpopup.style.display = 'none';
+    })
+
+    const okBtn = document.querySelector('.popup-approval .btn-ok');
     okBtn.addEventListener('click', function(e){
-        const modalpopup = document.querySelector('.popup-confirm');
+        const modalpopup = document.querySelector('.popup-confirm.popup-approval');
         modalpopup.style.display = 'none';
     })
 </script>

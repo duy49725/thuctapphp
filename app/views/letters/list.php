@@ -29,49 +29,68 @@
                 <tbody>
                     <?php foreach($letters as $letter): ?>
                         <tr style="<?php echo $letter->status == 'Đã hủy' ? 'background-color: #FFB5B5' : ($letter->status == 'Chờ duyệt' ? 'background-color: #90FF98' : 'background-color: white'); ?>">
-                            <td><?php echo $i = $i + 1; ?></td>
-                            <td><?php echo $letter->username ?></td>
-                            <td><?php echo $letter->typesOfApplication ?></td>
-                            <td><?php echo $letter->created_at ?></td>
-                            <td><?php echo $letter->status ?></td>
-                            <td><?php echo $letter->approvalDate ?></td>
-                            <td style="border-right: none"><?php echo $letter->title ?></td>
+                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $i = $i + 1; ?></a></td>
+                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->username ?></a></td>
+                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->typesOfApplication ?></a></td>
+                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->created_at ?></a></td>
+                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->status ?></a></td>
+                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->approvalDate ?></a></td>
+                            <td style="border-right: none;"><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->title ?></a></td>
                             
                             <td>
-                            <?php 
-                                if ($_SESSION['user_categoryUser'] == 'Admin' || (($_SESSION['user_categoryUser'] == 'Quản lý')) && $letter->approver === $_SESSION['user_id']): ?>
-                                    <div style="display: flex; justify-content:end; align-items: center; gap: 10px;">
-                                        <?php if ($letter->status == "Chờ duyệt"): ?>
-                                            <a href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" 
-                                            style="border: 2px solid black; background-color: #14ae5c; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0; text-align: center; line-height: 25px; text-decoration: none; display: inline-block;">
-                                                Duyệt
-                                            </a>
-                                            <button data-id="<?= $letter->letterId ?>" 
-                                                    style="background-color: #ec221f; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0;" 
-                                                    class="btn-cancel" type="button">
-                                                Hủy
-                                            </button>
-                                            <form action="<?= BASE_URL ?>/public/index.php?url=letters/cancelLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" method="POST">
-                                                <div class="popup-confirm" data-id="<?= $letter->letterId ?>" style="display: none; width: 614px; height: 356px">
-                                                    <div class="popup-container">
-                                                        <div class="popup-header">
-                                                            <p>Thông báo</p>
-                                                            <img src="./image/Vector.png" alt="" class="exit-btn">
-                                                        </div>
-                                                        <div class="popup-body" style="display: flex; justify-content: center; align-items: center; flex-direction: column">
-                                                            <p style="align-self: start; margin-left: 35px; font-size: 24px; font-weight: 400">Lý do hủy đơn ?</p>
-                                                            <input style="width: 540px; height: 76px; margin-top: 10px; border-radius: 4px; border: 1px solid #cccccc; font-size: 25px; padding: 10px" 
-                                                                type="text" name="reason">
-                                                            <div>
-                                                                <button class="btn-ok" type="submit">OK</button>
+                                <?php 
+                                    if ($_SESSION['user_categoryUser'] == 'Admin' || (($_SESSION['user_categoryUser'] == 'Quản lý')) && $letter->approver === $_SESSION['user_id']): ?>
+                                        <div style="display: flex; justify-content:end; align-items: center; gap: 10px;">
+                                            <?php if ($letter->status == "Chờ duyệt"): ?>
+                                                <button data-id="<?= $letter->letterId ?>" 
+                                                        style="border: 2px solid black; background-color: #14ae5c; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0; text-align: center; line-height: 25px; text-decoration: none; display: inline-block;"
+                                                        class="btn-approval" type="button">
+                                                    Duyệt
+                                                </button>
+                                                <button data-id="<?= $letter->letterId ?>" 
+                                                        style="background-color: #ec221f; color: white; width: 75px; height: 25px; border-radius: 4px; border: none; margin: 0;" 
+                                                        class="btn-cancel" type="button">
+                                                    Hủy
+                                                </button>
+                                                <form action="<?= BASE_URL ?>/public/index.php?url=letters/cancelLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" method="POST">
+                                                    <div class="popup-confirm popup-cancel" data-id="<?= $letter->letterId ?>" style="display: none; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4)">
+                                                        <div class="popup-container">
+                                                            <div class="popup-header">
+                                                                <p>Thông báo</p>
+                                                                <img src="./image/Vector.png" alt="" class="exit-btn">
+                                                            </div>
+                                                            <div class="popup-body" style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+                                                                <p style="align-self: start; margin-left: 35px; font-size: 24px; font-weight: 400">Lý do hủy đơn ?</p>
+                                                                <input style="width: 540px; height: 76px; margin-top: 10px; border-radius: 4px; border: 1px solid #cccccc; font-size: 25px; padding: 10px" 
+                                                                    type="text" name="reason">
+                                                                <div>
+                                                                    <button class="btn-ok" type="submit">OK</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </form>
-                                        <?php endif; ?>
-                                    </div>
-                                <?php endif; ?>
+                                                </form>
+                                                <form action="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" method="POST">
+                                                    <div class="popup-confirm popup-approval" data-id="<?= $letter->letterId ?>" style="display: none; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4)">
+                                                        <div class="popup-container" style="height: 350px">
+                                                            <div class="popup-header">
+                                                                <p>Thông báo</p>
+                                                                <img src="./image/Vector.png" alt="" class="exit-btn">
+                                                            </div>
+                                                            <div class="popup-body" style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+                                                                <p style="align-self: start; margin-left: 35px; font-size: 24px; font-weight: 400">Bạn có chắc muốn duyệt đơn này ?</p>
+                                                                <div style="margin-top: 60px">
+                                                                    <button style="width: 220px; height: 50px; border-radius: 4px; color: white; background-color: #007EC6; border: none;" class="btn-ok" type="submit">OK</button>
+                                                                    <button style="width: 220px; height: 50px; border-radius: 4px; color: white; background-color: #E2005C; border: none;" class="btn-cancel">Cancel</button>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -134,11 +153,24 @@
 </div>
 
 <script>
+    const approvalButtons = document.querySelectorAll('.btn-approval');
+    approvalButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const letterId = this.getAttribute('data-id');
+            const modalPopup = document.querySelector(`.popup-confirm[data-id="${letterId}"].popup-approval`);
+            if (modalPopup) {
+                modalPopup.style.display = 'flex';
+            } else {
+                console.error(`Không tìm thấy popup với data-id="${letterId}"`);
+            }
+        });
+    });
+
     const cancelButtons = document.querySelectorAll('.btn-cancel');
     cancelButtons.forEach(btn => {
         btn.addEventListener('click', function() {
             const letterId = this.getAttribute('data-id');
-            const modalPopup = document.querySelector(`.popup-confirm[data-id="${letterId}"]`);
+            const modalPopup = document.querySelector(`.popup-confirm[data-id="${letterId}"].popup-cancel`);
             if (modalPopup) {
                 modalPopup.style.display = 'flex';
             } else {
