@@ -75,10 +75,12 @@
                 <img src="./image/Vector.png" alt="" id="close-image" style="cursor: pointer; top: 20px; position: absolute; right: 20px; width: 20px; height: 20px">
             </div>
         </div>
-        <div class="button">
-            <button id="btn-continue" type="submit" class="continue">Duyệt</button>
-            <button id="btn-cancel-letter" class="btn-cancel" type="button">Hủy</button>
-        </div>
+        <?php if ($_SESSION['user_categoryUser'] == 'Admin' || (($_SESSION['user_categoryUser'] == 'Quản lý')) && $approver === $_SESSION['user_id']): ?>
+            <div class="button">
+                <button id="btn-continue" type="submit" class="continue">Duyệt</button>
+                <button id="btn-cancel-letter" class="btn-cancel" type="button">Hủy</button>
+            </div>
+        <?php endif; ?>
         <div class="popup-confirm popup-approval">
             <div class="popup-container" style="height: 350px">
                 <div class="popup-header">

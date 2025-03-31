@@ -13,5 +13,9 @@
             ];
             $this->view('dashboard/dashboard', $data);
         }
+
+        public function error(){
+            $this->view('dashboard/error');
+        }
     }
 ?>

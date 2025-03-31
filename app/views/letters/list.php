@@ -17,7 +17,7 @@
                 <thead>
                     <tr>
                         <th>STT</th>
-                        <th><a style="color: black" href="<?php echo BASE_URL ?>/public/index.php?url=letters&sort=username&order=<?php echo $sort == 'username' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo $search; ?>&page=<?php echo $page; ?>">Người dùng</a></th>
+                        <th><a style="color: black;" href="<?php echo BASE_URL ?>/public/index.php?url=letters&sort=username&order=<?php echo $sort == 'username' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo $search; ?>&page=<?php echo $page; ?>">Người dùng</a></th>
                         <th><a style="color: black" href="<?php echo BASE_URL ?>/public/index.php?url=letters&sort=typesOfApplication&order=<?php echo $sort == 'typesOfApplication' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo $search; ?>&page=<?php echo $page; ?>">Loại đơn</a></th>
                         <th><a style="color: black" href="<?php echo BASE_URL ?>/public/index.php?url=letters&sort=created_at&order=<?php echo $sort == 'created_at' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo $search; ?>&page=<?php echo $page; ?>">Ngày lập</a></th>
                         <th><a style="color: black" href="<?php echo BASE_URL ?>/public/index.php?url=letters&sort=status&order=<?php echo $sort == 'status' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>&search=<?php echo $search; ?>&page=<?php echo $page; ?>">Trạng thái</a></th>
@@ -28,16 +28,16 @@
                 </thead>
                 <tbody>
                     <?php foreach($letters as $letter): ?>
-                        <tr style="<?php echo $letter->status == 'Đã hủy' ? 'background-color: #FFB5B5' : ($letter->status == 'Chờ duyệt' ? 'background-color: #90FF98' : 'background-color: white'); ?>">
-                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $i = $i + 1; ?></a></td>
-                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->username ?></a></td>
-                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->typesOfApplication ?></a></td>
-                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->created_at ?></a></td>
-                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->status ?></a></td>
-                            <td><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->approvalDate ?></a></td>
-                            <td style="border-right: none;"><a style="color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->title ?></a></td>
+                        <tr style="height: 100%; border: 5px solid black; <?php echo $letter->status == 'Đã hủy' ? 'background-color: #FFB5B5' : ($letter->status == 'Chờ duyệt' ? 'background-color: #90FF98' : 'background-color: white'); ?>">
+                            <td style="padding: 0;"><a style="padding: 10px; color: black; width: 100%; height: 100%; display: block; box-sizing: border-box;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $i = $i + 1; ?></a></td>
+                            <td style="padding: 0;"><a style="padding: 10px; color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->username ?></a></td>
+                            <td style="padding: 0;"><a style="padding: 10px; color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->typesOfApplication ?></a></td>
+                            <td style="padding: 0;"><a style="padding: 10px; color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->created_at ?></a></td>
+                            <td style="padding: 0;"><a style="padding: 10px; color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->status ?></a></td>
+                            <td style="padding: 0;"><a style="padding: 10px; color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->approvalDate ?></a></td>
+                            <td style="border-right: none; padding: 0;"><a style="padding: 10px; color: black; width: 100%; height: 100%; display: inline-block;" href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>"><?php echo $letter->title ?></a></td>
                             
-                            <td>
+                            <td padding: 0;>
                                 <?php 
                                     if ($_SESSION['user_categoryUser'] == 'Admin' || (($_SESSION['user_categoryUser'] == 'Quản lý')) && $letter->approver === $_SESSION['user_id']): ?>
                                         <div style="display: flex; justify-content:end; align-items: center; gap: 10px;">
