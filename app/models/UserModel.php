@@ -4,14 +4,16 @@
             parent::__construct();
         }
 
-        public function getUsers($page = 1, $sort = '1', $order = 'ASC', $search = ''){
+        public function getUsers($page = 1, $sort = '1', $order = 'ASC', $search = '', $department, $categoryUser){
             $offset = ($page - 1) * ITEMS_PER_PAGE;
             $stmt = $this->db->callProcedure('GetUsers', [
                 $offset,
                 ITEMS_PER_PAGE,
                 $sort,
                 $order,
-                $search
+                $search,
+                $department,
+                $categoryUser
             ]);
 
             $users = $stmt->fetchAll(PDO::FETCH_OBJ);

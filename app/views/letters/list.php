@@ -36,9 +36,10 @@
                             <td><?php echo $letter->status ?></td>
                             <td><?php echo $letter->approvalDate ?></td>
                             <td style="border-right: none"><?php echo $letter->title ?></td>
+                            
                             <td>
                             <?php 
-                                if ($_SESSION['user_categoryUser'] == 'Admin' || ($_SESSION['user_categoryUser'] == 'Quản lý')): ?>
+                                if ($_SESSION['user_categoryUser'] == 'Admin' || (($_SESSION['user_categoryUser'] == 'Quản lý')) && $letter->approver === $_SESSION['user_id']): ?>
                                     <div style="display: flex; justify-content:end; align-items: center; gap: 10px;">
                                         <?php if ($letter->status == "Chờ duyệt"): ?>
                                             <a href="<?= BASE_URL ?>/public/index.php?url=letters/approvalLetter/<?= $letter->letterId ?>/<?= $letter->userId ?>" 

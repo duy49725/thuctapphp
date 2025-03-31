@@ -64,7 +64,9 @@
             $sort = isset($_GET['sort']) ? $_GET['sort'] : 'letters.letterId';
             $order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
             $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-            $result = $this->letterModel->getLetters($page, $sort, $order, $search);
+            $department =  $_SESSION['user_department'];
+            $categoryUser = $_SESSION['user_categoryUser'];
+            $result = $this->letterModel->getLetters($page, $sort, $order, $search, $categoryUser, $department);
             $letters = $result['letters'];
             $total = $result['total'];
 

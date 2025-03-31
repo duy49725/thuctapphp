@@ -12,10 +12,11 @@
             $sort = isset($_GET['sort']) ? $_GET['sort'] : 'userId';
             $order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
             $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-            $result = $this->userModel->getUsers($page, $sort, $order, $search);
+            $department =  $_SESSION['user_department'];
+            $categoryUser = $_SESSION['user_categoryUser'];
+            $result = $this->userModel->getUsers($page, $sort, $order, $search, $department, $categoryUser);
             $users = $result['users'];
             $total = $result['total'];
-
             $totalPages = ceil($total / ITEMS_PER_PAGE);
             $data = [
                 'users' => $users,
@@ -23,10 +24,11 @@
                 'totalPages' => $totalPages,
                 'sort' => $sort,
                 'order' => $order,
-                'search' => $search
+                'search' => $search,
+                'department' => $department
             ];
-
-            $this->view('users/list', $data);
+            
+            $this->view('users/list', $data); 
         }
 
         public function testCreate(){

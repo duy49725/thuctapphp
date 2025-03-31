@@ -4,14 +4,16 @@
             parent::__construct();
         }
 
-        public function getLetters($page = 1, $sort = '1', $order = 'ASC', $search = ''){
+        public function getLetters($page = 1, $sort = '1', $order = 'ASC', $search = '', $categoryUser, $department){
             $offset = ($page - 1) * ITEMS_PER_PAGE;
             $stmt = $this->db->callProcedure('GetLetters', [
                 $offset,
                 ITEMS_PER_PAGE,
                 $sort,
                 $order,
-                $search
+                $search,
+                $categoryUser, 
+                $department
             ]);
             $letters = $stmt->fetchAll(PDO::FETCH_OBJ);
             $stmt->nextRowset();
