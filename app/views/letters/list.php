@@ -80,8 +80,8 @@
             <div class="pagination">
                 <div class="prev">
                     <?php if($page > 1): ?>
-                        <a href="<?php echo BASE_URL; ?>/public/index.php?url=letters&page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo $order; ?>&search=<?php echo $search; ?>">
-                            <img src="./image/arrowleft.png" alt=""> Previous
+                        <a style="display:flex; align-items: center" href="<?php echo BASE_URL; ?>/public/index.php?url=letters&page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo $order; ?>&search=<?php echo $search; ?>">
+                            <img src="./image/arrowleft.svg" alt="" style="margin-top: 2px; width: 16px; height: 16px; opacity: 0.5"> Previous
                         </a>
                     <?php endif; ?>
                 </div>
@@ -121,8 +121,8 @@
                 </div>
                 <div class="next">
                     <?php if($page < $totalPages): ?>
-                        <a href="<?php echo BASE_URL; ?>/public/index.php?url=letters&page=<?php echo $page + 1; ?>&sort=<?php echo $sort; ?>&search=<?php echo $search; ?>">
-                            Next <img src="./image/arrowright.png" alt="">
+                        <a style="display:flex; align-items: center" href="<?php echo BASE_URL; ?>/public/index.php?url=letters&page=<?php echo $page + 1; ?>&sort=<?php echo $sort; ?>&search=<?php echo $search; ?>">
+                            Next <img src="./image/arrowright.svg" alt="" style="margin-top: 2px; width: 16px; height: 16px; opacity: 0.5">
                         </a>
                     <?php endif; ?>
                 </div>

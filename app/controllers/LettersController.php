@@ -420,16 +420,5 @@
                 $this->redirect('letters');
             }
         }
-        public function delete($id){
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                if($this->letterModel->deleteLetter($id)){
-                    $this->redirect('letters');
-                }else{
-                    die('Something went wrong');
-                }
-            }else{
-                $this->redirect('letters');
-            }
-        }
     }
 ?>

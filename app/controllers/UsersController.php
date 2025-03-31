@@ -145,7 +145,7 @@
                 $birthDate = $userData['birthDate'] ?? '';
                 $categoryUser = $userData['categoryUser'] ?? '';
                 $department = $userData['department'] ?? '';
-                $status = $userData['status'] ?? '';
+                $status = $userData['status'] ?? 'Đang hoạt động';
                 $data = [
                     'username' => $username,
                     'fullname' => $fullname,
@@ -311,7 +311,7 @@
                 $birthDate = $userData['birthDate'] ?? '';
                 $categoryUser = $userData['categoryUser'] ?? '';
                 $department = $userData['department'] ?? '';
-                $status = $userData['status'] ?? '';
+                $status = $userData['status'] ?? 'Đang hoạt động';
                 $data = [
                     'userId' => $userId,
                     'username' => $username,
