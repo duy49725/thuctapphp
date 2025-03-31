@@ -266,6 +266,8 @@
                     header('Location: ' . BASE_URL . "/public/index.php?url=letters");
                     exit();
                 }
+                $user_department = $_SESSION['user_department'];
+                $usersDepartment = $this->letterModel->getUserByDepartment($user_department);
                 $letterData = $_SESSION['add_letter'];
                 $userId = $letterData['userId'];
                 $title = $letterData['title'];
@@ -293,7 +295,8 @@
                     'typesOfApplication_err' => '',
                     'startDate_err' => '', 
                     'endDate_err' => '',
-                    'attachment_err' => ''
+                    'attachment_err' => '',
+                    'usersDepartment' => $usersDepartment
                 ];
                 $this->view('letters/create', $data);
             }
@@ -347,6 +350,8 @@
                 }
             }else{
                 $letterData = $this->letterModel->getLetterById($letterId);
+                $user_department = $_SESSION['user_department'];
+                $usersDepartment = $this->letterModel->getUserByDepartment($user_department);
                 $userId = $letterData->userId;
                 $title = $letterData->title;
                 $content = $letterData->content;
@@ -364,7 +369,8 @@
                     'typesOfApplication' => $typesOfApplication,
                     'startDate' => $startDate,
                     'endDate' => $endDate,
-                    'attachment' => $attachment
+                    'attachment' => $attachment,
+                    'usersDepartment' => $usersDepartment
                 ];
                 $this->view('letters/approval', $data);
             }

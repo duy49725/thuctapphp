@@ -23,8 +23,11 @@
                 <label for="">Người duyệt</label>
                 <div class="categoryUser-container">
                     <select name="approver" id="" disabled style="background-color: #CCCCCC;">
-                        <option value="Người A" <?php echo $approver == "Người A" ? "selected" : '' ?> >Người A</option>
-                        <option value="Người B" <?php echo $approver == "Người B" ? "selected" : '' ?> >Người B</option>
+                        <?php 
+                            foreach($usersDepartment as $userdp){
+                                echo "<option value='$userdp->userId' " . ($approver == $userdp->userId ? "selected" : "") . ">$userdp->username</option>";
+                            }                            
+                        ?>
                     </select>
                 </div>
             </div>
