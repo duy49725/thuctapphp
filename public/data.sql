@@ -49,25 +49,43 @@ BEGIN
 END$$
 DELIMITER ;
 
-
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AddUser`(
-	IN p_username varchar(100),
-    IN p_fullname varchar(100),
-    IN p_password varchar(100),
-    IN p_email varchar(100),
-    IN p_birthDate date,
-    IN p_categoryUser varchar(100),
-    IN p_department varchar(100),
-    IN p_status varchar(100)
+    IN p_username VARCHAR(100),
+    IN p_fullname VARCHAR(100),
+    IN p_password VARCHAR(100),
+    IN p_email VARCHAR(100),
+    IN p_birthDate DATE,
+    IN p_categoryUser VARCHAR(100),
+    IN p_department VARCHAR(100),
+    IN p_status VARCHAR(100)
 )
 BEGIN
-	START TRANSACTION;
-    INSERT INTO users (username, fullname, password, email, birthDate, categoryUser, department, status)
-    VALUES (p_username, p_fullname, p_password, p_email, p_birthDate, p_categoryUser, p_department, p_status);
-    IF ROW_COUNT() > 0 THEN COMMIT;
-    ELSE ROLLBACK ;
-	END IF ;
+    DECLARE v_username_count INT DEFAULT 0;
+    DECLARE v_email_count INT DEFAULT 0;
+    
+    START TRANSACTION;
+
+    SELECT COUNT(*) INTO v_username_count 
+    FROM users 
+    WHERE username = p_username;
+    
+    SELECT COUNT(*) INTO v_email_count 
+    FROM users 
+    WHERE email = p_email;
+    IF v_username_count > 0 OR v_email_count > 0 THEN
+        ROLLBACK;
+    ELSE
+
+        INSERT INTO users (username, fullname, password, email, birthDate, categoryUser, department, status)
+        VALUES (p_username, p_fullname, p_password, p_email, p_birthDate, p_categoryUser, p_department, p_status);
+
+        IF ROW_COUNT() > 0 THEN
+            COMMIT;
+        ELSE
+            ROLLBACK;
+        END IF;
+    END IF;
 END$$
 DELIMITER ;
 
@@ -124,6 +142,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteUser`(
 	IN p_userId INT
@@ -153,6 +172,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `FindUserByEmail`(
 	IN p_email varchar(255)
@@ -171,6 +191,7 @@ BEGIN
 	Select * from users where username = p_username;
 END$$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetLetterById`(
@@ -199,33 +220,66 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetLetters`(
     IN p_limit INT,
     IN p_sort VARCHAR(50),
     IN p_order VARCHAR(10),
-    IN p_search VARCHAR(255)
+    IN p_search VARCHAR(255),
+    IN p_categoryUser VARCHAR(50),
+    IN p_department VARCHAR(100)
 )
 BEGIN
-    SET @query = CONCAT(
-        'SELECT letterId, letters.userId, u.username, title, content, approver, typesOfApplication, approvalDate, startDate, endDate, letters.status, attachment, letters.created_at
-        FROM letters 
-        INNER JOIN users u ON letters.userId = u.userId 
-        WHERE title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ? ORDER BY ' , p_sort, ' ' , p_order , ' LIMIT ?, ?'
-    );
-    
-    SET @search_param = CONCAT('%', p_search, '%');
+    DECLARE search_param VARCHAR(255);
+    SET search_param = CONCAT('%', p_search, '%');
 
-    PREPARE stmt FROM @query;
-    EXECUTE stmt USING @search_param, @search_param, @search_param, @search_param, p_offset, p_limit;
+    IF p_categoryUser = 'Admin' THEN
+        SET @query = CONCAT(
+            'SELECT letterId, letters.userId, u.username, title, content, approver, typesOfApplication, approvalDate, startDate, endDate, letters.status, attachment, letters.created_at
+            FROM letters 
+            INNER JOIN users u ON letters.userId = u.userId 
+            WHERE title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ? 
+            ORDER BY ', p_sort, ' ', p_order, 
+            ' LIMIT ?, ?'
+        );
 
-    SET @count_query = '
-        SELECT COUNT(*) as total 
-        FROM letters 
-        INNER JOIN users u ON letters.userId = u.userId 
-        WHERE title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ?';
-    PREPARE count_stmt FROM @count_query;
-    EXECUTE count_stmt USING @search_param, @search_param, @search_param, @search_param;
+        PREPARE stmt FROM @query;
+        EXECUTE stmt USING search_param, search_param, search_param, search_param, p_offset, p_limit;
+        DEALLOCATE PREPARE stmt;
 
-    DEALLOCATE PREPARE stmt;
-    DEALLOCATE PREPARE count_stmt;
+        SET @count_query = '
+            SELECT COUNT(*) as total 
+            FROM letters 
+            INNER JOIN users u ON letters.userId = u.userId 
+            WHERE title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ?';
+
+        PREPARE count_stmt FROM @count_query;
+        EXECUTE count_stmt USING search_param, search_param, search_param, search_param;
+        DEALLOCATE PREPARE count_stmt;
+    ELSE
+        SET @query = CONCAT(
+            'SELECT letterId, letters.userId, u.username, title, content, approver, typesOfApplication, approvalDate, startDate, endDate, letters.status, attachment, letters.created_at
+            FROM letters 
+            INNER JOIN users u ON letters.userId = u.userId 
+            WHERE (title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ?) 
+            AND u.department = ? 
+            ORDER BY ', p_sort, ' ', p_order, 
+            ' LIMIT ?, ?'
+        );
+
+        PREPARE stmt FROM @query;
+        EXECUTE stmt USING search_param, search_param, search_param, search_param, p_department, p_offset, p_limit;
+        DEALLOCATE PREPARE stmt;
+
+        SET @count_query = '
+            SELECT COUNT(*) as total 
+            FROM letters 
+            INNER JOIN users u ON letters.userId = u.userId 
+            WHERE (title LIKE ? OR typesOfApplication LIKE ? OR letters.status LIKE ? OR u.username LIKE ?) 
+            AND u.department = ?';
+
+        PREPARE count_stmt FROM @count_query;
+        EXECUTE count_stmt USING search_param, search_param, search_param, search_param, p_department;
+        DEALLOCATE PREPARE count_stmt;
+    END IF;
 END$$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserByDepartment`(IN `p_department` VARCHAR(100))
@@ -233,6 +287,7 @@ BEGIN
 	SELECT * from users where (department = p_department and categoryUser = 'Quản lý') OR categoryUser = 'Admin';
 END$$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserById`(
@@ -250,21 +305,53 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUsers`(
     IN p_limit INT,
     IN p_sort VARCHAR(50),
     IN p_order VARCHAR(10),
-    IN p_search VARCHAR(255)
+    IN p_search VARCHAR(255),
+    IN p_department VARCHAR(100),
+    IN p_categoryUser VARCHAR(50) 
 )
 BEGIN
-    SET @query = CONCAT('SELECT userId, username, fullname, password, email, birthDate, categoryUser, department, status, created_at FROM users WHERE username LIKE ? OR userId LIKE ? ORDER BY ', p_sort, ' ', p_order, ' LIMIT ?, ?');
-    
-    SET @search_param = CONCAT('%', p_search, '%');
-    
-    PREPARE stmt FROM @query;
-    EXECUTE stmt USING @search_param, @search_param, p_offset, p_limit;
-    
-    SELECT COUNT(*) as total FROM users WHERE username LIKE CONCAT('%', p_search, '%') OR userId LIKE CONCAT('%', p_search, '%');
-    
-    DEALLOCATE PREPARE stmt;
+    DECLARE search_param VARCHAR(255);
+    SET search_param = CONCAT('%', p_search, '%');
+
+    IF p_categoryUser = 'Admin' THEN
+        SET @query = CONCAT(
+            'SELECT userId, username, fullname, password, email, birthDate, categoryUser, department, status, created_at 
+             FROM users 
+             WHERE (username LIKE ? OR userId LIKE ?) 
+             ORDER BY ', p_sort, ' ', p_order, 
+            ' LIMIT ?, ?'
+        );
+        
+        PREPARE stmt FROM @query;
+        EXECUTE stmt USING search_param, search_param, p_offset, p_limit;
+        DEALLOCATE PREPARE stmt;
+
+        SET @count_query = 'SELECT COUNT(*) AS total FROM users WHERE username LIKE ? OR userId LIKE ?';
+        PREPARE stmt_count FROM @count_query;
+        EXECUTE stmt_count USING search_param, search_param;
+        DEALLOCATE PREPARE stmt_count;
+    ELSE
+        SET @query = CONCAT(
+            'SELECT userId, username, fullname, password, email, birthDate, categoryUser, department, status, created_at 
+             FROM users 
+             WHERE department = ? 
+             AND (username LIKE ? OR userId LIKE ?) 
+             ORDER BY ', p_sort, ' ', p_order, 
+            ' LIMIT ?, ?'
+        );
+
+        PREPARE stmt FROM @query;
+        EXECUTE stmt USING p_department, search_param, search_param, p_offset, p_limit;
+        DEALLOCATE PREPARE stmt;
+
+        SET @count_query = 'SELECT COUNT(*) AS total FROM users WHERE department = ? AND (username LIKE ? OR userId LIKE ?)';
+        PREPARE stmt_count FROM @count_query;
+        EXECUTE stmt_count USING p_department, search_param, search_param;
+        DEALLOCATE PREPARE stmt_count;
+    END IF;
 END$$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUser`(
