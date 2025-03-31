@@ -10,6 +10,7 @@
             <button class="btn-add"><a href="<?php echo BASE_URL ?>/public/index.php?url=users/testcreate">Thêm mới</a></button>
             <?php if($_SESSION['user_categoryUser'] == 'Quản lý' || $_SESSION['user_categoryUser'] == 'Admin'): ?>
                 <form action="<?php echo BASE_URL; ?>/public/index.php?url=users/deleteMultiple" method="POST" id="delete-form">
+                    <input type="hidden" name="all_checked_ids" id="all-checked-ids"> <!-- Trường ẩn để gửi tất cả ID -->
                     <button type="submit" class="btn-deleteAll" id="delete-selected" disabled>Xóa nhiều</button>
                     <div class="popup-confirm" style="display: none;">
                         <div class="popup-container" style="height: 350px;">
@@ -99,7 +100,7 @@
             <div class="pagination">
                 <div class="prev">
                     <?php if ($page > 1): ?>
-                        <a style="display:flex; align-items: center"  href="<?php echo BASE_URL; ?>/public/index.php?url=users&page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo $order; ?>&search=<?php echo $search; ?>">
+                        <a style="display:flex; align-items: center" href="<?php echo BASE_URL; ?>/public/index.php?url=users&page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo $order; ?>&search=<?php echo $search; ?>">
                             <img src="./image/arrowleft.svg" alt="" style="margin-top: 2px; width: 16px; height: 16px; opacity: 0.5"> Previous
                         </a>
                     <?php endif; ?>
@@ -162,11 +163,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteForm = document.getElementById('delete-form');
     const checkIcon = document.getElementById('checked-icon');
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentPage = urlParams.get('page') || '1';
+
+    function restoreCheckboxState() {
+        const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates') || '{}');
+        const checkedIds = checkboxStates[currentPage] || [];
+        userCheckboxes.forEach(checkbox => {
+            const userId = checkbox.value;
+            checkbox.checked = checkedIds.includes(userId);
+            const row = checkbox.closest('tr');
+            const checkIconEach = row.querySelector('.checked-icon-each');
+            if (checkIconEach) {
+                checkIconEach.style.display = checkbox.checked ? 'inline-block' : 'none';
+            }
+        });
+        updateDeleteButton();
+        updateSelectAllState();
+        updateAllCheckedIds();
+    }
+
+    function saveCheckboxState() {
+        const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates') || '{}');
+        const checkedIds = Array.from(userCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        checkboxStates[currentPage] = checkedIds;
+        localStorage.setItem('checkboxStates', JSON.stringify(checkboxStates));
+        updateAllCheckedIds();
+    }
+
+    function updateAllCheckedIds() {
+        const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates') || '{}');
+        const allCheckedIds = Object.values(checkboxStates).flat();
+        document.getElementById('all-checked-ids').value = allCheckedIds.join(',');
+    }
+
+    function updateSelectAllState() {
+        const allChecked = Array.from(userCheckboxes).every(cb => cb.checked);
+        const noneChecked = Array.from(userCheckboxes).every(cb => !cb.checked);
+        selectAll.checked = allChecked;
+        checkIcon.style.display = allChecked ? 'inline-block' : 'none';
+    }
+
+    function updateDeleteButton() {
+        const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates') || '{}');
+        const allCheckedIds = Object.values(checkboxStates).flat();
+        deleteSelected.disabled = allCheckedIds.length === 0;
+    }
+
+    restoreCheckboxState();
+
     if (selectAll) {
         selectAll.addEventListener('change', function(e) {
             const isChecked = e.target.checked;
             checkIcon.style.display = isChecked ? 'inline-block' : 'none';
-
             userCheckboxes.forEach(checkbox => {
                 checkbox.checked = isChecked;
                 const row = checkbox.closest('tr');
@@ -176,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             updateDeleteButton();
+            saveCheckboxState();
         });
     }
 
@@ -187,39 +239,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 checkIconEach.style.display = e.target.checked ? 'inline-block' : 'none';
             }
             updateDeleteButton();
-
-            const allChecked = Array.from(userCheckboxes).every(cb => cb.checked);
-            const noneChecked = Array.from(userCheckboxes).every(cb => !cb.checked);
-            if (allChecked) {
-                selectAll.checked = true;
-                checkIcon.style.display = 'inline-block';
-            } else if (noneChecked) {
-                selectAll.checked = false;
-                checkIcon.style.display = 'none';
-            }
+            updateSelectAllState();
+            saveCheckboxState();
         });
     });
-
-    function updateDeleteButton() {
-        const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
-        deleteSelected.disabled = checkedCount === 0;
-    }
 
     if (deleteSelected && deleteForm) {
         deleteSelected.addEventListener('click', function(e) {
             e.preventDefault();
+            const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates') || '{}');
+            const allCheckedIds = Object.values(checkboxStates).flat();
             const modalPopup = deleteForm.querySelector('.popup-confirm');
-            if (modalPopup) {
+            if (modalPopup && allCheckedIds.length > 0) {
+                const message = modalPopup.querySelector('.popup-body p');
+                message.textContent = `Bạn có chắc chắn muốn xóa ${allCheckedIds.length} người dùng đã chọn?`;
                 modalPopup.style.display = 'flex';
             }
         });
 
         deleteForm.addEventListener('submit', function(e) {
-            const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
-            if (checkedCount === 0) {
+            const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates') || '{}');
+            const allCheckedIds = Object.values(checkboxStates).flat();
+            if (allCheckedIds.length === 0) {
                 e.preventDefault();
                 return;
             }
+            localStorage.removeItem('checkboxStates'); 
         });
 
         const cancelButton = deleteForm.querySelector('.btn-cancel');

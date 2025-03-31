@@ -102,10 +102,9 @@
                     <p>Thông báo</p>
                     <img src="./image/Vector.png" alt="" class="exit-btn">
                 </div>
-                <div class="popup-body" style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+                <div class="popup-body" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
                     <p style="align-self: start; margin-left: 35px; font-size: 24px; font-weight: 400">Lý do hủy đơn ?</p>
-                    <input style="width: 540px; height: 76px; margin-top: 10px; border-radius: 4px; border: 1px solid #cccccc; font-size: 25px; padding: 10px;" 
-                        type="text" name="reason">
+                    <input style="width: 540px; height: 76px; margin-top: 10px; border-radius: 4px; border: 1px solid #cccccc; font-size: 25px; padding: 10px; position: initial;" type="text" name="reason">
                     <div>
                         <button class="btn-ok" type="submit">OK</button>
                     </div>
