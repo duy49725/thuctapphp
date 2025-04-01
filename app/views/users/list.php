@@ -10,7 +10,7 @@
             <button class="btn-add"><a href="<?php echo BASE_URL ?>/public/index.php?url=users/testcreate">Thêm mới</a></button>
             <?php if($_SESSION['user_categoryUser'] == 'Quản lý' || $_SESSION['user_categoryUser'] == 'Admin'): ?>
                 <form action="<?php echo BASE_URL; ?>/public/index.php?url=users/deleteMultiple" method="POST" id="delete-form">
-                    <input type="hidden" name="all_checked_ids" id="all-checked-ids"> <!-- Trường ẩn để gửi tất cả ID -->
+                    <input type="hidden" name="all_checked_ids" id="all-checked-ids"> 
                     <button type="submit" class="btn-deleteAll" id="delete-selected" disabled>Xóa nhiều</button>
                     <div class="popup-confirm" style="display: none;">
                         <div class="popup-container" style="height: 350px;">
