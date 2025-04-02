@@ -330,6 +330,7 @@ class UsersController extends BaseController {
                 'categoryUser_err' => '',
                 'department_err' => ''
             ];
+            
             if (empty($data['username'])) {
                 $data['username_err'] = 'Xin hãy nhập tên';
             }
@@ -359,8 +360,14 @@ class UsersController extends BaseController {
             if (empty($data['department'])) {
                 $data['department_err'] = 'Xin hãy nhập phòng ban';
             }
+            
+            $user = $this->userModel->getUserById($userId);
 
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            if($data['password'] !== $user->password){
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            }else{
+                $data['password'] = $data['password'];
+            }
             if ($this->userModel->updateUser($data)) {
                 unset($_SESSION['edit_user']);
                 $this->redirect('users');
