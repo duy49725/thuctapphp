@@ -514,3 +514,8 @@ a{
     color: black;
     cursor: pointer;
 }
+
+
+#check-empty{
+    color: red;
+}
