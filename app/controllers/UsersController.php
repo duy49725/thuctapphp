@@ -222,6 +222,7 @@ class UsersController extends BaseController {
                 'department_err' => '',
                 'status_err' => ''
             ];
+            $user = $this->userModel->getUserById($userId);
             if (empty($data['username'])) {
                 $data['username_err'] = '※Xin hãy nhập tên';
             }
@@ -232,7 +233,7 @@ class UsersController extends BaseController {
 
             if (empty($data['password'])) {
                 $data['password_err'] = '※Xin hãy nhập mật khẩu';
-            } elseif (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $data['password'])) {
+            } elseif (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $data['password']) && $user->password !== $data['password']) {
                 $data['password_err'] = "※Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ cái, số và ký tự đặc biệt!";
             }
 

@@ -119,34 +119,16 @@
         document.getElementById('email').value = '';
     })
     // document.querySelector('form').addEventListener('submit', function(e){
-    //     const username = document.getElementById('username');
-    //     const fullname = document.getElementById('fullname');
     //     const password = document.getElementById('password');
-    //     const email = document.getElementById('email');
-    //     console.log(username);
-    //     const check_username = document.querySelector('.check-username');
-    //     const check_fullname = document.querySelector('.check-fullname');
     //     const check_password = document.querySelector('.check-password');
-    //     const check_email = document.querySelector('.check-email');
-
-    //     if(!username.value){
-    //         e.preventDefault();
-    //         check_username.innerHTML = '※Tên người dùng không được để trống';
-    //     }
-
-    //     if(!fullname.value){
-    //         e.preventDefault();
-    //         check_fullname.innerHTML = '※Tên người dùng không được để trống';
-    //     }
-
+    //     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     //     if(!password.value){
     //         e.preventDefault();
-    //         check_password.innerHTML = '※Mật khẩu không được để trốngtrống';
+    //         check_password.innerHTML = '※Mật khẩu không được để trống';
+    //     }else if(!regex.test(password.value)){
+    //         e.preventDefault();
+    //         check_password.innerHTML = '※Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ cái, số và ký tự đặc biệt!';
     //     }
 
-    //     if(!email.value){
-    //         e.preventDefault();
-    //         check_email.innerHTML = '※Email không được để trống';
-    //     }
     // })
 </script>
