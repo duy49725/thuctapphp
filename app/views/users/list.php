@@ -71,7 +71,9 @@
                             <td><?php echo $user->created_at ?></td>
                             <td><?php echo $user->status ?></td>
                             <td>
-                                <button class="btn-edit"><a href="<?php echo BASE_URL ?>/public/index.php?url=users/testedit/<?php echo $user->userId ?>">Sửa</a></button>
+                                <?php if($_SESSION['user_id'] === $user->userId): ?>
+                                    <button class="btn-edit"><a href="<?php echo BASE_URL ?>/public/index.php?url=users/testedit/<?php echo $user->userId ?>">Sửa</a></button>
+                                <?php endif; ?>
                                 <?php if($_SESSION['user_categoryUser'] == 'Quản lý' || $_SESSION['user_categoryUser'] == 'Admin'): ?>   
                                     <button class="btn-delete" data-id="<?php echo $user->userId ?>">Xóa</button>
                                     <form action="<?php echo BASE_URL ?>/public/index.php?url=users/delete/<?php echo $user->userId ?>" method="POST">
