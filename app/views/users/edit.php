@@ -79,7 +79,9 @@
         </div>
         <div class="button">
             <button id="btn-continue" class="continue">Lưu</button>
-            <button class="clear">Xóa trống</button>
+            <button class="clear" type="button" style="padding: 0; width: 220px; height: 50px;">
+                <a style="display: block; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center" href="<?php echo BASE_URL; ?>/public/index.php?url=users/testedit/<?php echo $userId; ?>">Quay lại</a>
+            </button>
         </div>
         <div class="popup-confirm">
             <div class="popup-container" style="height: 350px">
